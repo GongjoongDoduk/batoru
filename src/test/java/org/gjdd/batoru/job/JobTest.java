@@ -33,14 +33,13 @@ public final class JobTest implements ModInitializer {
                                 );
                                 return false;
                             })
-                            .addListener((HandSwingListener) (job, player, hand) -> {
-                                player.sendMessage(
-                                        Text.literal(
-                                                "onHandSwing(" + hand + ")"
-                                        )
-                                );
-                                return false;
-                            })
+                            .addListener((HandSwingListener) (job, player, hand) ->
+                                    player.sendMessage(
+                                            Text.literal(
+                                                    "onHandSwing(" + hand + ")"
+                                            )
+                                    )
+                            )
                             .addListener((PlayerInputListener) (job, player, input) ->
                                     player.sendMessage(
                                             Text.literal(

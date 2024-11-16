@@ -7,5 +7,5 @@ import org.gjdd.batoru.job.Job;
 import org.gjdd.batoru.job.event.Listener;
 
 public interface HandSwingListener extends Listener {
-    boolean onHandSwing(RegistryEntry<Job> job, ServerPlayerEntity player, Hand hand);
+    void onHandSwing(RegistryEntry<Job> job, ServerPlayerEntity player, Hand hand);
 }

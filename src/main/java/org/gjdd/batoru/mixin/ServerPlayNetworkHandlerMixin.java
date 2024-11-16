@@ -107,26 +107,22 @@ public abstract class ServerPlayNetworkHandlerMixin {
         }
     }
 
-    @Inject(method = "onHandSwing", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "onHandSwing", at = @At(value = "HEAD"))
     private void batoru$injectOnHandSwing(HandSwingC2SPacket packet, CallbackInfo info) {
         var job = player.getJob();
         if (job == null) {
             return;
         }
 
-        var cancelled = job.value()
+        job.value()
                 .getListenerDispatcher()
                 .getListeners(HandSwingListener.class)
-                .stream()
-                .anyMatch(listener ->
+                .forEach(listener ->
                         listener.onHandSwing(
                                 job,
                                 player,
                                 packet.getHand()
                         )
                 );
-        if (cancelled) {
-            info.cancel();
-        }
     }
 }
