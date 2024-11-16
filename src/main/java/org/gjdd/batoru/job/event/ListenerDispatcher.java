@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 import org.gjdd.batoru.job.Job;
 import org.gjdd.batoru.job.event.entity.JobAssignedListener;
 import org.gjdd.batoru.job.event.entity.player.HandSwingListener;
+import org.gjdd.batoru.job.event.entity.player.PlayerInteractItemListener;
 import org.gjdd.batoru.job.event.entity.player.UpdateSelectedSlotListener;
 
 import java.util.*;
@@ -150,6 +151,60 @@ public final class ListenerDispatcher {
          */
         public Builder assignSkillOnHandSwing(Hand hand, Item item, Identifier id) {
             return assignSkillOnHandSwing(hand, itemStack -> itemStack.isOf(item), id);
+        }
+
+        /**
+         * Assigns a skill to be activated when a player interacts with an item in a specific hand,
+         * if the given condition is met.
+         *
+         * @param hand      the hand
+         * @param predicate a condition that takes the job and player as input
+         * @param id        the identifier of the skill in the job's skill map
+         * @return this builder instance
+         */
+        public Builder assignSkillOnItemInteract(
+                Hand hand,
+                BiPredicate<RegistryEntry<Job>, ServerPlayerEntity> predicate,
+                Identifier id
+        ) {
+            return addListener((PlayerInteractItemListener) (job, player, value) -> {
+                if (hand != value || !predicate.test(job, player)) {
+                    return false;
+                }
+
+                var skill = job.value().getSkillMap().get(id);
+                if (skill != null) {
+                    player.useSkill(skill);
+                }
+
+                return true;
+            });
+        }
+
+        /**
+         * Assigns a skill to be activated when a player interacts with an item in a specific hand,
+         * if the item in the player's specified hand satisfies the given predicate.
+         *
+         * @param hand      the hand
+         * @param predicate a condition that tests the item stack in the specified hand
+         * @param id        the identifier of the skill in the job's skill map
+         * @return this builder instance
+         */
+        public Builder assignSkillOnItemInteract(Hand hand, Predicate<ItemStack> predicate, Identifier id) {
+            return assignSkillOnItemInteract(hand, (job, player) -> predicate.test(player.getStackInHand(hand)), id);
+        }
+
+        /**
+         * Assigns a skill to be activated when a player interacts with an item in a specific hand,
+         * if the player is holding the specified item in their specified hand.
+         *
+         * @param hand the hand
+         * @param item the item that must be held in the specified hand
+         * @param id   the identifier of the skill in the job's skill map
+         * @return this builder instance
+         */
+        public Builder assignSkillOnItemInteract(Hand hand, Item item, Identifier id) {
+            return assignSkillOnItemInteract(hand, itemStack -> itemStack.isOf(item), id);
         }
 
         /**
