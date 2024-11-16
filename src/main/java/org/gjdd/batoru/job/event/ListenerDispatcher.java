@@ -5,9 +5,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import org.gjdd.batoru.job.Job;
 import org.gjdd.batoru.job.event.entity.JobAssignedListener;
+import org.gjdd.batoru.job.event.entity.player.HandSwingListener;
 import org.gjdd.batoru.job.event.entity.player.UpdateSelectedSlotListener;
 
 import java.util.*;
@@ -96,6 +98,79 @@ public final class ListenerDispatcher {
         public Builder addListeners(Collection<? extends Listener> listeners) {
             this.listeners.addAll(listeners);
             return this;
+        }
+
+        /**
+         * Assigns a skill to be activated when a player swings a specific hand,
+         * if the given condition is met.
+         *
+         * @param hand         the hand
+         * @param shouldCancel whether to cancel the hand swing event after handling
+         * @param predicate    a condition that takes the job and player as input
+         * @param id           the identifier of the skill in the job's skill map
+         * @return this builder instance
+         */
+        public Builder assignSkillOnHandSwing(
+                Hand hand,
+                boolean shouldCancel,
+                BiPredicate<RegistryEntry<Job>, ServerPlayerEntity> predicate,
+                Identifier id
+        ) {
+            return addListener((HandSwingListener) (job, player, value) -> {
+                if (hand != value || !predicate.test(job, player)) {
+                    return false;
+                }
+
+                var skill = job.value().getSkillMap().get(id);
+                if (skill != null) {
+                    player.useSkill(skill);
+                }
+
+                return shouldCancel;
+            });
+        }
+
+        /**
+         * Assigns a skill to be activated when a player swings a specific hand,
+         * if the item in the player's specified hand satisfies the given predicate.
+         *
+         * @param hand         the hand
+         * @param shouldCancel whether to cancel the hand swing event after handling
+         * @param predicate    a condition that tests the item stack in the specified hand
+         * @param id           the identifier of the skill in the job's skill map
+         * @return this builder instance
+         */
+        public Builder assignSkillOnHandSwing(
+                Hand hand,
+                boolean shouldCancel,
+                Predicate<ItemStack> predicate,
+                Identifier id
+        ) {
+            return assignSkillOnHandSwing(
+                    hand,
+                    shouldCancel,
+                    (job, player) -> predicate.test(player.getStackInHand(hand)),
+                    id
+            );
+        }
+
+        /**
+         * Assigns a skill to be activated when a player swings a specific hand,
+         * if the player is holding the specified item in their specified hand.
+         *
+         * @param hand         the hand
+         * @param shouldCancel whether to cancel the hand swing event after handling
+         * @param item         the item that must be held in the specified hand
+         * @param id           the identifier of the skill in the job's skill map
+         * @return this builder instance
+         */
+        public Builder assignSkillOnHandSwing(
+                Hand hand,
+                boolean shouldCancel,
+                Item item,
+                Identifier id
+        ) {
+            return assignSkillOnHandSwing(hand, shouldCancel, itemStack -> itemStack.isOf(item), id);
         }
 
         /**
