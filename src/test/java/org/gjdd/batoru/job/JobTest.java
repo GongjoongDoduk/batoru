@@ -45,7 +45,16 @@ public final class JobTest implements ModInitializer {
                                             Text.literal(
                                                     "onPlayerInput(" + input + ")"
                                             )
-                                    ))
+                                    )
+                            )
+                            .addListener((PlayerInteractItemListener) (job, player, hand) -> {
+                                player.sendMessage(
+                                        Text.literal(
+                                                "onPlayerInteractItem(" + hand + ")"
+                                        )
+                                );
+                                return false;
+                            })
                             .addListener((SwapOffhandListener) (job, player, mainHandStack, offHandStack) -> {
                                 player.sendMessage(
                                         Text.literal(
