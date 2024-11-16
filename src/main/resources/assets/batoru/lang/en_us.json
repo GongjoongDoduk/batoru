@@ -1,0 +1,15 @@
+{
+  "commands.cast.failed": "Couldn't cast skill %2$s for %1$s: %3$s",
+  "commands.cast.failed.entity": "%s is not a valid entity for this command",
+  "commands.cast.success.multiple": "Cast skill %2$s for %1$s entities",
+  "commands.cast.success.single": "Cast skill %2$s for %1$s",
+  "commands.job.clear.success.multiple": "Cleared job for %s entities",
+  "commands.job.clear.success.single": "Cleared job for %s",
+  "commands.job.failed.entity": "%s is not a valid entity for this command",
+  "commands.job.get.empty": "%s has no job assigned",
+  "commands.job.get.success": "%s has job %s",
+  "commands.job.set.success.multiple": "Set job %2$s for %1$s entities",
+  "commands.job.set.success.single": "Set job %2$s for %1$s",
+  "job.notFound": "Unknown job: %s",
+  "skill.notFound": "Unknown skill: %s"
+}
