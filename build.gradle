@@ -1,0 +1,36 @@
+plugins {
+    id 'fabric-loom'
+    id 'maven-publish'
+}
+
+repositories {
+    maven { url 'https://maven.nucleoid.xyz' }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:$minecraftVersion"
+    mappings "net.fabricmc:yarn:$yarnVersion:v2"
+    modImplementation "net.fabricmc:fabric-loader:$fabricLoaderVersion"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$fabricApiVersion"
+    modImplementation "eu.pb4:polymer-core:$polymerVersion"
+    modCompileOnly "eu.pb4:placeholder-api:$placeholderApiVersion"
+}
+
+processResources {
+    filesMatching('fabric.mod.json') {
+        expand project.properties
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}

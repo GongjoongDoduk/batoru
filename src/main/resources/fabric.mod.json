@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "batoru",
+  "version": "${version}",
+  "name": "Batoru",
+  "description": "Skill API for mini-games",
+  "authors": [
+    "GongjoongDoduk"
+  ],
+  "license": "Apache-2.0",
+  "icon": "assets/batoru/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.gjdd.batoru.BatoruMod"
+    ]
+  },
+  "mixins": [
+    "batoru.mixins.json"
+  ],
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_1309": [
+        "org/gjdd/batoru/internal/LivingEntityExtensions"
+      ],
+      "net/minecraft/class_1291": [
+        "org/gjdd/batoru/internal/StatusEffectExtensions"
+      ]
+    }
+  },
+  "depends": {
+    "minecraft": ">=${minecraftVersion}",
+    "fabricloader": ">=${fabricLoaderVersion}",
+    "fabric-api": ">=${fabricApiVersion}",
+    "polymer-core": ">=${polymerVersion}"
+  }
+}

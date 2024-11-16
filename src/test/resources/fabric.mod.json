@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "batoru-test",
+  "version": "1.0.0",
+  "name": "Batoru Test",
+  "license": "Apache-2.0",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.gjdd.batoru.channeling.ChannelingTest",
+      "org.gjdd.batoru.compatibility.PlaceHolderTest",
+      "org.gjdd.batoru.effect.PushedStatusEffectTest",
+      "org.gjdd.batoru.job.JobTest",
+      "org.gjdd.batoru.skill.SkillTest"
+    ]
+  },
+  "depends": {
+    "batoru": "*"
+  }
+}

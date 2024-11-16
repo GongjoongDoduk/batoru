@@ -1,0 +1,9 @@
+{
+  "package": "org.gjdd.batoru.mixin",
+  "mixins": [
+    "LivingEntityMixin",
+    "PlayerInventoryMixin",
+    "ServerPlayNetworkHandlerMixin",
+    "StatusEffectMixin"
+  ]
+}
