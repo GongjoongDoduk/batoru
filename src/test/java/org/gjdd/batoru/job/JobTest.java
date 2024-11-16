@@ -1,9 +1,12 @@
 package org.gjdd.batoru.job;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.gjdd.batoru.job.event.ListenerDispatcher;
 import org.gjdd.batoru.job.event.entity.JobAssignedListener;
 import org.gjdd.batoru.job.event.entity.JobUnassignedListener;
@@ -12,9 +15,16 @@ import org.gjdd.batoru.registry.BatoruRegistries;
 
 public final class JobTest implements ModInitializer {
     private final Job testJob = Job.builder()
+            .addEquipment(EquipmentSlot.MAINHAND, Items.FISHING_ROD::getDefaultStack)
+            .addEquipment(EquipmentSlot.CHEST, Items.LEATHER_CHESTPLATE::getDefaultStack)
             .addDisabledHotbarSlots(0, 1, 2, 3)
             .setListenerDispatcher(
                     ListenerDispatcher.builder()
+                            .assignSkillToHotbarSlot(0, Items.STICK, Identifier.of("batoru-test:normal_1"))
+                            .assignSkillToHotbarSlot(1, Items.STICK, Identifier.of("batoru-test:normal_2"))
+                            .assignSkillToHotbarSlot(2, Items.STICK, Identifier.of("batoru-test:normal_3"))
+                            .assignSkillToHotbarSlot(3, Items.STICK, Identifier.of("batoru-test:ultimate"))
+                            .enableAutoEquip()
                             .addListener((DropItemListener) (job, player, entireStack) -> {
                                 player.sendMessage(
                                         Text.literal(
